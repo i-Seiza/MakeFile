@@ -9,9 +9,11 @@ public:
 	bool GetDiskVolumeInfo(TCHAR *_path = NULL);
 	DWORD GetBytesPerSector();
 	TCHAR *GetPath();
+	TCHAR *GetDrive();
 
 	DWORD GetSectorsPerCluster();
 	DWORD GetNumberOfFreeClusters();
+	unsigned __int64 GetTotalNumberOfBytes();
 
 	unsigned __int64 GetTotalNumberOfFreeBytes();
 	bool IsSupportsSparseFiles();

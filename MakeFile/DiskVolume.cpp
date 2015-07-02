@@ -119,6 +119,11 @@ TCHAR * CDiskVolume::GetPath()
 
 
 
+TCHAR * CDiskVolume::GetDrive()
+{
+	return drive;
+}
+
 DWORD CDiskVolume::GetBytesPerSector()
 {
 	return BytesPerSector;
@@ -133,6 +138,11 @@ DWORD CDiskVolume::GetSectorsPerCluster()
 DWORD CDiskVolume::GetNumberOfFreeClusters()
 {
 	return NumberOfFreeClusters;
+}
+
+unsigned __int64 CDiskVolume::GetTotalNumberOfBytes()
+{
+	return TotalNumberOfBytes;
 }
 
 unsigned __int64 CDiskVolume::GetTotalNumberOfFreeBytes()

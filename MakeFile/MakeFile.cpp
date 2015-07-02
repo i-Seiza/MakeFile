@@ -14,35 +14,11 @@
 #include "WriteFileBack512.h"
 #include "WriteFileBeginAll.h"
 #include "WriteFilePart512.h"
-
+#include "FileIO.h"
 
 
 
 const TCHAR pDummyFile[] = L"E:\\dummy.txt";
-
-bool FileOpen( HANDLE *hFile, TCHAR *path, DWORD dwFlagsAndAttributes )
-{
-	CLog log;
-
-	// 一旦ファイルをopen
-	*hFile = CreateFile(
-		path,
-		GENERIC_WRITE | GENERIC_READ,
-		FILE_SHARE_READ|FILE_SHARE_WRITE,
-		NULL,
-		OPEN_ALWAYS,
-		dwFlagsAndAttributes,
-		NULL
-		);
-	if (*hFile == INVALID_HANDLE_VALUE)
-	{
-		// ファイルが開けなかった。どうしよう？
-		log.AddResult(L"ファイルオープン", false);
-		return false;
-	}
-
-	return true;
-}
 
 
 // ファイルサイズを確定する
@@ -86,7 +62,8 @@ bool SparseFile( HANDLE *hFile, CDiskVolume v )
 
 
 	// 一旦ファイルをopen
-	bool bSuccess = FileOpen( hFile, v.GetPath(), FILE_ATTRIBUTE_NORMAL );
+	CFileIO io;
+	bool bSuccess = io.FileOpen( hFile, v.GetPath(), FILE_ATTRIBUTE_NORMAL );
 	if (!bSuccess)
 	{
 		return false;
@@ -119,10 +96,11 @@ bool TryEndWrite512ByteNormal(TCHAR *path, DWORD dwFlagsAndAttributes)
 
 
 	CLog log;
+	CFileIO io;
 
 	// ディスク空き容量分のファイルを作成する
 	HANDLE hFile = NULL;
-	bSuccess = FileOpen( &hFile, v.GetPath(), dwFlagsAndAttributes );
+	bSuccess = io.FileOpen( &hFile, v.GetPath(), dwFlagsAndAttributes );
 	if (!bSuccess)
 	{
 		return false;
@@ -146,10 +124,7 @@ bool TryEndWrite512ByteNormal(TCHAR *path, DWORD dwFlagsAndAttributes)
 
 	bSuccess = wf.Execute(&hFile, v);
 
-	if (hFile)
-	{
-		CloseHandle(hFile);
-	}
+	io.FileClose(&hFile);
 
 	DWORD end = GetTickCount();
 	log.Add(L"処理時間/秒", (end-start)/1000);
@@ -172,10 +147,11 @@ bool TryBeginWrite512ByteNormal(TCHAR *path, DWORD dwFlagsAndAttributes, int iTi
 
 
 	CLog log;
+	CFileIO io;
 
 	// ディスク空き容量分のファイルを作成する
 	HANDLE hFile = NULL;
-	bSuccess = FileOpen( &hFile, v.GetPath(), dwFlagsAndAttributes );
+	bSuccess = io.FileOpen( &hFile, v.GetPath(), dwFlagsAndAttributes );
 	if (!bSuccess)
 	{
 		return false;
@@ -197,10 +173,7 @@ bool TryBeginWrite512ByteNormal(TCHAR *path, DWORD dwFlagsAndAttributes, int iTi
 	CWriteFilePart512 wf( bufSize, 0 );
 	bSuccess = wf.Execute(&hFile, v);
 
-	if (hFile)
-	{
-		CloseHandle(hFile);
-	}
+	io.FileClose(&hFile);
 
 	DWORD end = GetTickCount();
 	log.Add(L"処理時間/秒", (end-start)/1000);

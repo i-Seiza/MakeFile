@@ -53,14 +53,6 @@ bool Process(HANDLE *hFile, CDiskVolume v)
 	CLog log;
 	bool bSuccess = false;
 
-	// デバイスのロック
-	bSuccess = DeviceIoControlObj( hFile, FSCTL_LOCK_VOLUME);
-	if(bSuccess==0)
-	{
-		log.AddResult(L"DeviceIoControl(FSCTL_LOCK_VOLUME)", bSuccess != 0);
-		return false;
-	}
-
 	// Dismount the volume.
 	bSuccess = DeviceIoControlObj( hFile, (DWORD) FSCTL_DISMOUNT_VOLUME);
 	if(bSuccess==0)
@@ -83,16 +75,6 @@ bool Process(HANDLE *hFile, CDiskVolume v)
 
 	// メモリ解放
 	VirtualFree(buf, 0, MEM_FREE);
-
-#if 0
-	// デバイスのロック解除
-	bSuccess = DeviceIoControl( hFile, FSCTL_UNLOCK_VOLUME );
-	if(bSuccess==0)
-	{
-		log.AddResult(L"DeviceIoControl", bSuccess != 0);
-		//return false;
-	}
-#endif
 
 	return bSuccess;
 }

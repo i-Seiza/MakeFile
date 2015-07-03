@@ -67,7 +67,7 @@ bool Process(HANDLE *hFile, CDiskVolume v)
 
 
 	// ƒƒ‚ƒŠŽæ“¾
-	LONGLONG bufSize = v.GetBytesPerSector() * 1000 * 1000;
+	LONGLONG bufSize = v.GetBytesPerSector() * 1024 * 1024;//ToBiz -> 128*1024*1024
 	TCHAR* buf = (TCHAR*)VirtualAlloc(NULL, bufSize, MEM_COMMIT, PAGE_READWRITE);
 
 	bSuccess = WriteFileObj( hFile, buf, bufSize, v );

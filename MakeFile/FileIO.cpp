@@ -19,9 +19,9 @@ bool CFileIO::FileOpen(HANDLE *hFile, std::wstring path, DWORD dwFlagsAndAttribu
 	*hFile = CreateFile(
 		path.c_str(),
 		GENERIC_WRITE | GENERIC_READ,
-		FILE_SHARE_READ|FILE_SHARE_WRITE,
+		FILE_SHARE_READ|FILE_SHARE_WRITE | FILE_SHARE_DELETE,
 		NULL,
-		OPEN_ALWAYS,
+		OPEN_EXISTING,
 		dwFlagsAndAttributes,
 		NULL
 		);
@@ -44,14 +44,26 @@ bool CFileIO::FileClose(HANDLE *hFile)
 	return true;
 }
 
+bool CFileIO::FixFileSize( HANDLE *hFile, LONGLONG pointer, LONGLONG size )
+{
+	CLog log;
+
+	SetFilePointer( hFile, pointer );
+
+	bool bSuccess = SetEndOfFile(*hFile);
+	log.AddResult(L"SetEndOfFile", bSuccess != 0);
+	if(bSuccess == 0)	return false;
+
+	return true;
+}
+
 // ファイルサイズを確定する
-bool CFileIO::SetFileSize( HANDLE *hFile, LONGLONG size )
+bool CFileIO::SetFilePointer( HANDLE *hFile, LONGLONG pointer )
 {
 	CLog log;
 
 	LARGE_INTEGER li;
-	li.QuadPart = size;
-
+	li.QuadPart = pointer;
 
 	LARGE_INTEGER NewFilePointer;
 	bool bSuccess = SetFilePointerEx(
@@ -61,10 +73,6 @@ bool CFileIO::SetFileSize( HANDLE *hFile, LONGLONG size )
 		FILE_BEGIN
 		);
 	log.AddResult(L"SetFilePointerEx(1)", bSuccess != 0);
-	if(bSuccess == 0)	return false;
-
-	bSuccess = SetEndOfFile(*hFile);
-	log.AddResult(L"SetEndOfFile", bSuccess != 0);
 	if(bSuccess == 0)	return false;
 
 	return true;

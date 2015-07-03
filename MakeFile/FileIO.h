@@ -13,6 +13,7 @@ public:
 
 	bool FileOpen( HANDLE *hFile, std::wstring path, DWORD dwFlagsAndAttributes );
 	bool FileClose(HANDLE *hFile);
-	bool SetFileSize( HANDLE *hFile, LONGLONG size );
+	bool SetFilePointer( HANDLE *hFile, LONGLONG pointer );
+	bool FixFileSize( HANDLE *hFile, LONGLONG pointer, LONGLONG size );
 
 };

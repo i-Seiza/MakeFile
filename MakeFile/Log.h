@@ -22,6 +22,8 @@ public:
 		std::wstring wtext = boost::lexical_cast<std::wstring>(value);
 		Log(wtext);
 	}
+
+	void Add(std::wstring sTitle, TCHAR *value );
 	void Add( std::wstring sTitle, GUID guid );
 
 	void AddLastError();

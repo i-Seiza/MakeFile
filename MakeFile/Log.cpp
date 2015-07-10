@@ -54,3 +54,9 @@ void CLog::Add( std::wstring sTitle, GUID guid )
 	else	Add(L"GUIDÇÃèoóÕÇ…é∏îs");
 
 }
+
+void CLog::Add(std::wstring sTitle, TCHAR *value )
+{
+	if(value)		Add(sTitle ,std::wstring(value));
+	else			Add(sTitle ,L"ïsñæ");
+}

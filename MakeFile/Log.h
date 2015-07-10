@@ -2,6 +2,8 @@
 #include "Windows.h"
 #include <string>
 #include <boost/lexical_cast.hpp>
+#include <boost/format.hpp>
+#include <Objbase.h>
 
 //template <typename T>
 class CLog
@@ -20,6 +22,7 @@ public:
 		std::wstring wtext = boost::lexical_cast<std::wstring>(value);
 		Log(wtext);
 	}
+	void Add( std::wstring sTitle, GUID guid );
 
 	void AddLastError();
 	void AddResult( std::wstring sTitle, bool bSuccess );

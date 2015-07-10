@@ -45,3 +45,12 @@ void CLog::AddResult( std::wstring sTitle, bool bSuccess )
 
 	Add(wtext);
 }
+
+void CLog::Add( std::wstring sTitle, GUID guid )
+{
+	TCHAR strGuid[40];
+	int ret = StringFromGUID2(guid, strGuid, sizeof(strGuid));
+	if(ret)	Add(sTitle, strGuid);
+	else	Add(L"GUIDÇÃèoóÕÇ…é∏îs");
+
+}

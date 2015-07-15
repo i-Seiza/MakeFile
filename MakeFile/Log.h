@@ -5,11 +5,18 @@
 #include <boost/format.hpp>
 #include <Objbase.h>
 
-//template <typename T>
 class CLog
 {
+
+private:
+	bool m_bWriteFile;	// ファイルに書き出すかどうか
+
+
+
+
 public:
 	CLog(void);
+	CLog(bool bFile);
 	~CLog(void);
 
 	template <typename T>	void Add(std::wstring sTitle, T value )
@@ -31,4 +38,7 @@ public:
 
 private:
 	void Log(std::wstring str);
+	void SetWriteFile( bool bStatus );
+	void RefreshLogFile();
+
 };

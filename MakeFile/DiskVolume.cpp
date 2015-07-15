@@ -13,7 +13,7 @@ void CDiskVolume::SetPath(TCHAR *_path)
 {
 	swprintf_s(path, MAX_PATH, _path );
 	_wsplitpath_s( path, drive, MAX_PATH, NULL, 0, NULL, 0, NULL, 0 );
-	wcscat(drive, L"\\");
+	wcscat_s(drive, MAX_PATH, L"\\");
 }
 
 // 指定されたドライブの情報を取得する
@@ -105,7 +105,7 @@ bool CDiskVolume::GetDiskVolumeInfo(TCHAR *_path)
 		return false;
 	}
 
-	bSupportsSparseFiles = FileSystemFlags & FILE_SUPPORTS_SPARSE_FILES;
+	bSupportsSparseFiles = FileSystemFlags & FILE_SUPPORTS_SPARSE_FILES ? true : false;
 
 
 	return true;

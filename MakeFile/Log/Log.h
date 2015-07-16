@@ -8,15 +8,9 @@
 class CLog
 {
 
-private:
-	bool m_bWriteFile;	// ファイルに書き出すかどうか
-
-
-
 
 public:
 	CLog(void);
-	CLog(bool bFile);
 	~CLog(void);
 
 	template <typename T>	void Add(std::wstring sTitle, T value )
@@ -36,9 +30,10 @@ public:
 	void AddLastError();
 	void AddResult( std::wstring sTitle, bool bSuccess );
 
-private:
-	void Log(std::wstring str);
-	void SetWriteFile( bool bStatus );
-	void RefreshLogFile();
+
+protected:
+	virtual void Log(std::wstring str);
+
+
 
 };

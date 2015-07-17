@@ -40,6 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="Log"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -115,6 +116,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="Log"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="2"
@@ -183,10 +185,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Log.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\MakeFile.cpp"
 				>
 			</File>
@@ -251,7 +249,19 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\Version.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\VirusClearLog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\VirusClearLog2010.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\VirusClearLog2015.cpp"
 				>
 			</File>
 		</Filter>
@@ -269,10 +279,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Log.h"
-				>
-			</File>
-			<File
 				RelativePath=".\sqlite3.h"
 				>
 			</File>
@@ -285,7 +291,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Version.h"
+				>
+			</File>
+			<File
 				RelativePath=".\VirusClearLog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\VirusClearLog2010.h"
+				>
+			</File>
+			<File
+				RelativePath=".\VirusClearLog2015.h"
 				>
 			</File>
 		</Filter>
@@ -294,6 +312,26 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+		</Filter>
+		<Filter
+			Name="Log"
+			>
+			<File
+				RelativePath=".\Log\Log.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Log\Log.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Log\LogFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Log\LogFile.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"

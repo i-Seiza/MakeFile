@@ -1,42 +1,29 @@
 #include "StdAfx.h"
 #include "VirusClearLog.h"
-#include <windows.h>
-#include "sqlite3.h"
 
-
-#include "log.h"
-
-// Type define function pointer in sqlite3.dll
-typedef int (__cdecl * pOpen)(char *, sqlite3 **);
-typedef int (__cdecl * pExec)(sqlite3 *, const char *, sqlite3_callback, void *, char **);
-typedef int (__cdecl * pGetTable)(sqlite3 *, const char *, char ***, int *, int *, char **);
-typedef int (__cdecl * pFreeTable)(char **);
-typedef int (__cdecl * pClose)(sqlite3 *);
 
 
 CVirusClearLog::CVirusClearLog(void)
 {
+	m_Log = new CLogFile(L"CVirusClearLog.txt");
+	Initialize();
 }
 
 CVirusClearLog::~CVirusClearLog(void)
 {
+	if(m_Log)	delete m_Log;
+	m_Log = NULL;
+
+	FreeLibrary(hDll);
+
 }
 
-void CVirusClearLog::Read( char *path )
+void CVirusClearLog::Initialize()
 {
-	CLog log(true);
-
-
-	HINSTANCE hDll;
-	// function pointer
-	pOpen sqlite3_open;
-	pExec sqlite3_exec;
-	pGetTable sqlite3_get_table;
-	pFreeTable sqlite3_free_table;
-	pClose sqlite3_close;
-
+	CLogFile log(L"CVirusClearLog.txt");
 	// Load sqlite3.dll
 	hDll = LoadLibrary(L"sqlite3.dll");
+	if(m_Log)	m_Log->AddResult( L"CVirusClearLog::Initialize", hDll != NULL );
 	if (hDll == NULL)
 	{
 		return;
@@ -48,35 +35,58 @@ void CVirusClearLog::Read( char *path )
 	sqlite3_get_table = (pGetTable)GetProcAddress(hDll, "sqlite3_get_table");
 	sqlite3_free_table = (pFreeTable)GetProcAddress(hDll, "sqlite3_free_table");
 	sqlite3_close = (pClose)GetProcAddress(hDll, "sqlite3_close");
-
-	sqlite3 *db;
-	char *err;
-	char **result;
-	int row, col;
-	int i, j;
-
-
-	// Open the sqlite log database file
-	int a = sqlite3_open(path, &db);
-	// Get the query result
-//	sqlite3_get_table(db, "select * from LOG_MALWARE;", &result, &row, &col, &err);
-	sqlite3_get_table(db, "select * from LogData;", &result, &row, &col, &err);
-	// Show the result data
-	log.Add((boost::format( "row=%1% : col=%2%\n" ) % row % col).str().c_str() );
-	for (i=0;i < (col * row +1);)
-	{
-		for (j=0;j < col;j++)
-		{
-			log.Add((boost::format( " %s" ) % result[i]).str().c_str() );
-			i++;
-		}
-		//printf("\n");
-	}
-	// Free the memory that sqlite3_get_table() allocated
-	sqlite3_free_table(result);
-	// Close the database
-	sqlite3_close(db);
-	FreeLibrary(hDll);
+	sqlite3_errcode = (pErrCode)GetProcAddress(hDll, "sqlite3_errcode");
+	sqlite3_errmsg	= (pErrString)GetProcAddress(hDll, "sqlite3_errmsg");
 
 
 }
+
+
+void CVirusClearLog::Read( const TCHAR *_path )
+{
+
+    // ファイル情報
+    WIN32_FIND_DATA findData;
+
+    // ファイル時間
+    FILETIME fileTime;
+
+    // ファイル情報取得
+    HANDLE hFile = FindFirstFile(_path, &findData);
+
+    if (hFile == INVALID_HANDLE_VALUE)
+    {
+        // 失敗(不正パス)
+        return;
+    }
+
+    // 成功
+
+	SYSTEMTIME creationTime;
+	SYSTEMTIME lastAccessTime;
+	SYSTEMTIME lastWriteTime;
+
+    // ファイル検索ハンドル閉じる
+    FindClose(hFile);
+
+    // 作成日時
+    FileTimeToLocalFileTime(&findData.ftCreationTime, &fileTime);
+    FileTimeToSystemTime(&fileTime, &creationTime);
+
+    // アクセス日時
+    FileTimeToLocalFileTime(&findData.ftLastAccessTime, &fileTime);
+    FileTimeToSystemTime(&fileTime, &lastAccessTime);
+
+    // 更新日時
+    FileTimeToLocalFileTime(&findData.ftLastWriteTime, &fileTime);
+    FileTimeToSystemTime(&fileTime, &lastWriteTime);
+
+	m_Log->Add( L"作成日時", (boost::format( "%1%-%2%-%3% %4%:%5%:%6%" ) % creationTime.wYear % creationTime.wMonth % creationTime.wDay % creationTime.wHour % creationTime.wMinute % creationTime.wSecond ).str().c_str());
+	m_Log->Add( L"アクセス日時", (boost::format( "%1%-%2%-%3% %4%:%5%:%6%" ) % lastAccessTime.wYear % lastAccessTime.wMonth % lastAccessTime.wDay % lastAccessTime.wHour % lastAccessTime.wMinute % lastAccessTime.wSecond ).str().c_str());
+	m_Log->Add( L"更新日時", (boost::format( "%1%-%2%-%3% %4%:%5%:%6%" ) % lastWriteTime.wYear % lastWriteTime.wMonth % lastWriteTime.wDay % lastWriteTime.wHour % lastWriteTime.wMinute % lastWriteTime.wSecond ).str().c_str());
+
+
+
+
+}
+

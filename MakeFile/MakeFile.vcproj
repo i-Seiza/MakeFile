@@ -40,6 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="Log"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -187,6 +188,26 @@
 				>
 			</File>
 			<File
+				RelativePath=".\sqlite3.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -206,6 +227,22 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\Version.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\VirusClearLog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\VirusClearLog2010.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\VirusClearLog2015.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="ヘッダー ファイル"
@@ -221,7 +258,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\sqlite3.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Version.h"
+				>
+			</File>
+			<File
+				RelativePath=".\VirusClearLog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\VirusClearLog2010.h"
+				>
+			</File>
+			<File
+				RelativePath=".\VirusClearLog2015.h"
 				>
 			</File>
 		</Filter>

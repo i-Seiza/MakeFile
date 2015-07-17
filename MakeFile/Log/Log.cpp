@@ -63,3 +63,4 @@ void CLog::Add(std::wstring sTitle, TCHAR *value )
 	if(value)		Add(sTitle ,std::wstring(value));
 	else			Add(sTitle ,L"•s–¾");
 }
+

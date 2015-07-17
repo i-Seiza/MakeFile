@@ -24,6 +24,7 @@ public:
 		Log(wtext);
 	}
 
+
 	void Add(std::wstring sTitle, TCHAR *value );
 	void Add( std::wstring sTitle, GUID guid );
 

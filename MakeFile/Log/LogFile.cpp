@@ -23,6 +23,7 @@ CLogFile::~CLogFile(void)
 ////////////////////////////
 void CLogFile::SetDefault( TCHAR *path )
 {
+	_tsetlocale(LC_ALL, _T(""));
 	swprintf_s( m_LogName, MAX_PATH, path == NULL ? _LOG_FILE_NAME : path );
 }
 
@@ -32,7 +33,7 @@ void CLogFile::DeleteLog()
 	::DeleteFile(m_LogName);
 }
 
-void CLogFile::Save( std::wstring str )
+void CLogFile::Log( std::wstring str )
 {
 	CLog::Log(str);
 
